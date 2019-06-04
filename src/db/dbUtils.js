@@ -4,25 +4,19 @@ let db;
 const sqlInitializeDb = require("./initialTables.json");
 
 //create new tables if database not exists
-function initialDatabe(){
-
-sqlInitializeDb.initTables.forEach((sql)=>{
-  db.query(sql,(err,result)=>{
-    if(err) console.log(err);
-    else{
-
-      console.log("query ok");
-    }
+function initialDatabe() {
+  sqlInitializeDb.initTables.forEach(sql => {
+    db.query(sql, (err, result) => {
+      if (err) console.log(err);
+      else {
+        console.log("query ok");
+      }
+    });
   });
-})
-
-
-
 
   //
   // console.log(sqlInitializeDb.initDb);
   // console.log(typeof(sqlInitializeDb.initDb));
-
 }
 
 function connectDb() {
@@ -44,12 +38,11 @@ function connectDb() {
           console.log("Cannot connect to mySQL server");
         }
 
-
         console.log("Db not exists yet, creating new db...");
         let sql = "CREATE DATABASE IF NOT EXISTS airportDB";
         db.query(sql, (err, result) => {
           if (err) console.log("error", err);
-          else{
+          else {
             db = mysql.createConnection({
               host: "localhost",
               user: "root",
@@ -59,8 +52,6 @@ function connectDb() {
 
             initialDatabe();
           }
-
-          //console.log(result);
         });
       });
     } else {
@@ -70,11 +61,26 @@ function connectDb() {
   return db;
 }
 
-
-
-
-class Dbutils {
-
+function makeQuery(sql, data) {
+  return new Promise((resolve, reject) => {
+    try {
+      db.query(sql, data, (err, result) => {
+        if (result === undefined) {
+          //maybe non connection to db, try to reconnect
+          try {
+            if(err==="ECONNREFUSED") connectDb();
+            reject(err);
+          } catch (e) {
+            reject(err);
+          }
+        }
+        resolve(result);
+      });
+    } catch (err) {
+      console.log("fatal error",err);
+      reject(err);
+    }
+  });
 }
 
-module.exports = { Dbutils, connectDb };
+module.exports = { makeQuery, connectDb };

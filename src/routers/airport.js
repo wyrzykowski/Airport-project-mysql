@@ -2,29 +2,29 @@ const express = require('express');
 const router = new express.Router();
 const {makeQuery} = require("./../db/dbUtils");
 
-router.post(`/employee`,(req,res)=>{
+router.post(`/airport`,(req,res)=>{
 
-    let employee = {
+    let data = {
         name:req.body.name,
-        surname:req.body.surname,
-        age:req.body.age
+        runway_id:req.body.runway_id,
     };
 
-    console.log(employee);
-    makeQuery('INSERT INTO employee SET ?',employee).then(e=>{
+    makeQuery('INSERT INTO airport SET ?',data).then(e=>{
         console.log(e);
-        res.send(employee);
+        res.send(data);
     }).catch(e=>{
+        res.status(400).send(e);
         console.log(e);
     })
 });
 
-router.get('/employee',(req,res)=>{
-    makeQuery('SELECT * FROM employee').then(e=>{
+router.get('/airport',(req,res)=>{
+    makeQuery('SELECT * FROM airport').then(e=>{
         console.log(e);
         res.send(e);
     }).catch(e=>{
         console.log(e);
+        res.status(400).send(e);
     })
 });
 
