@@ -1,0 +1,15 @@
+{
+  "test": {
+    "PORT": 3001,
+    "MY_SQL_URI": "wpisac!",
+    "APP_NAME": "airpot-project",
+    "JWT_SECRET": "token123456"
+  },
+  "development": {
+    "PORT": 3001,
+    "MY_SQL_URI": "wpisac!",
+    "APP_NAME": "airport-project",
+    "JWT_SECRET": "token123456"
+  }
+}
+
