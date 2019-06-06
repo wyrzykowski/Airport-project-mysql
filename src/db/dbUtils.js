@@ -24,14 +24,16 @@ function connectDb() {
     host: "localhost",
     user: "root",
     password: "",
-    database: "airportDB"
+    database: "airportDB",
+    multipleStatements: true
   });
   db.connect(err => {
     if (err) {
       db = mysql.createConnection({
         host: "localhost",
         user: "root",
-        password: ""
+        password: "",
+        multipleStatements: true
       });
       db.connect(err => {
         if (err) {
@@ -47,7 +49,8 @@ function connectDb() {
               host: "localhost",
               user: "root",
               password: "",
-              database: "airportDB"
+              database: "airportDB",
+              multipleStatements: true
             });
 
             initialDatabe();
@@ -65,6 +68,7 @@ function makeQuery(sql, data) {
   return new Promise((resolve, reject) => {
     try {
       db.query(sql, data, (err, result) => {
+        console.log(err, result, sql, data);
         if (result === undefined) {
           //maybe non connection to db, try to reconnect
           try {
